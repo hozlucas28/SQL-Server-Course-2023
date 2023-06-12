@@ -23,6 +23,6 @@
 	"tabulateAlias": false,
 	"commaPosition": "after",
 	"expressionWidth": 50,
-	"linesBetweenQueries": 2,
+	"linesBetweenQueries": 1,
 	"newlineBeforeSemicolon": false
 }
