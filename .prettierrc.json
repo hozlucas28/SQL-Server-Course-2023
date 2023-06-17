@@ -22,7 +22,8 @@
 	"logicalOperatorNewline": "before",
 	"tabulateAlias": false,
 	"commaPosition": "after",
+	"denseOperators": false,
 	"expressionWidth": 50,
-	"linesBetweenQueries": 1,
+	"linesBetweenQueries": 2,
 	"newlineBeforeSemicolon": false
 }
