@@ -106,8 +106,9 @@ CREATE TABLE
 	referencias.nombres_provincias (
 		id_provincia INT IDENTITY (1, 1),
 		nombre VARCHAR(50) NOT NULL,
+		id_pais INT NOT NULL,
 		CONSTRAINT pk_id_provincia PRIMARY key (id_provincia),
-		CONSTRAINT fk_id_pais FOREIGN key (id_pais) REFERENCES referencias.paises (id_pais)
+		CONSTRAINT fk_id_pais_nombres_provincias FOREIGN key (id_pais) REFERENCES referencias.paises (id_pais)
 	);
 
 
@@ -134,13 +135,13 @@ CREATE TABLE
 		piso SMALLINT,
 		departamento SMALLINT,
 		CONSTRAINT pk_id_direccion PRIMARY key (id_direccion),
-		CONSTRAINT fk_id_pais FOREIGN key (id_pais) REFERENCES referencias.paises (id_pais),
+		CONSTRAINT fk_id_pais_direcciones FOREIGN key (id_pais) REFERENCES referencias.paises (id_pais),
 		CONSTRAINT fk_id_provincia FOREIGN key (id_provincia) REFERENCES referencias.nombres_provincias (id_provincia),
-		CONSTRAINT fk_id_localidad FOREIGN key (id_localidad) REFERENCES referencias.nombres_localidades (id_provincia)
+		CONSTRAINT fk_id_localidad FOREIGN key (id_localidad) REFERENCES referencias.nombres_localidades (id_localidad)
 	)
 	-- Creación de la tabla "Tipo de documento"
 CREATE TABLE
-	referencias.tipo_documento (
+	referencias.tipos_documentos (
 		id_tipo_documento INT IDENTITY (1, 1),
 		nombre VARCHAR(50) NOT NULL,
 		CONSTRAINT pk_id_tipo_documento PRIMARY key (id_tipo_documento)
@@ -158,30 +159,29 @@ CREATE TABLE
 		id_paciente INT IDENTITY (1, 1), --pk -- historia clinica
 		id_cobertura INT, --fk
 		id_direccion INT, --fk -- domicilio
-		id_tipo_documento tinyint NOT NULL,
+		id_tipo_documento INT NOT NULL,
 		nro_documento VARCHAR(50) NOT NULL, -- Poner un index no cluster aca? :clivio 
 		nombre nvarchar (50) NOT NULL,
 		apellido nvarchar (50) NOT NULL,
 		apellido_materno nvarchar (50),
 		fecha_nacimiento DATE NOT NULL,
 		sexo_biologico CHAR(1), -- M o F -- castear uppercase
-		id_genero tinyint NOT NULL, -- fk
-		nacionalidad SMALLINT, --fk 
+		id_genero INT NOT NULL, -- fk
+		nacionalidad INT, --fk 
 		foto_perfil image,
 		email nvarchar (70) NOT NULL,
 		tel_fijo VARCHAR(20) NOT NULL, -- check de solo numeros :sask
 		tel_alternativo VARCHAR(20),
 		tel_laboral VARCHAR(20),
-		fecha_registro DATE DEFAULT NOW (), -- un constraint para que sea default now()? :clivio -- current timestamp
+		fecha_registro DATE DEFAULT CAST(GETDATE () AS DATE), -- un constraint para que sea default now()? :clivio -- current timestamp
 		fecha_actualizacion DATE, --- TRIGGER :sask
 		usuario_actualizacion INT, --fk -- nose que es esto xd :clivio -- TRIGGER
 		CONSTRAINT pk_id_paciente PRIMARY key (id_paciente),
-		CONSTRAINT fk_id_cobertura FOREIGN key (id_cobertura) REFERENCES coberturas (id_cobertura),
-		CONSTRAINT fk_id_direccion FOREIGN key (id_direccion) REFERENCES referencias.direcciones (id_direccion),
-		CONSTRAINT fk_id_tipo_documento FOREIGN key (id_tipo_documento) REFERENCES referencias.direcciones (id_tipo_direccion),
+		CONSTRAINT fk_id_cobertura_pacientes FOREIGN key (id_cobertura) REFERENCES coberturas (id_cobertura),
+		CONSTRAINT fk_id_direccion_pacientes FOREIGN key (id_direccion) REFERENCES referencias.direcciones (id_direccion),
+		CONSTRAINT fk_id_tipo_documento FOREIGN key (id_tipo_documento) REFERENCES referencias.tipos_documentos (id_tipo_documento),
 		CONSTRAINT fk_id_genero FOREIGN key (id_genero) REFERENCES referencias.generos (id_genero),
-		CONSTRAINT fk_id_nacionalidad FOREIGN key (nacionalidad) REFERENCES referencias.paises (id_pais),
-		CONSTRAINT fk_id_usuario_actualizacion FOREIGN key (usuario_actualizacion) REFERENCES datos.usuarios (id_usuario)
+		CONSTRAINT fk_id_nacionalidad FOREIGN key (nacionalidad) REFERENCES referencias.paises (id_pais)
 	);
 
 
@@ -206,7 +206,7 @@ CREATE TABLE
 		id_usuario INT IDENTITY (1, 1),
 		contraseña VARCHAR(256), -- hashear?
 		id_paciente INT,
-		fecha_creacion DATE DEFAULT NOW (), -- default now() ?
+		fecha_creacion DATE DEFAULT CAST(GETDATE () AS DATE), -- default now() ?
 		CONSTRAINT pk_id_usuario PRIMARY key (id_usuario),
 		CONSTRAINT fk_id_paciente_usuario FOREIGN key (id_paciente) REFERENCES datos.pacientes (id_paciente)
 	);
@@ -218,7 +218,7 @@ CREATE TABLE
 		id_cobertura INT IDENTITY (1, 1),
 		imagen_credencial image,
 		nro_socio VARCHAR(30) NOT NULL,
-		fecha_registro DATE DEFAULT now (), --objecion :sask 
+		fecha_registro DATE DEFAULT CAST(GETDATE () AS DATE), --objecion :sask 
 		CONSTRAINT pk_id_cobertura PRIMARY key (id_cobertura),
 	);
 
@@ -240,7 +240,7 @@ CREATE TABLE
 	datos.reservas_turnos_medicos (
 		id_turno INT IDENTITY (1, 1),
 		fecha DATE DEFAULT now (),
-		hora TIME DEFAULT CAST(now () AS TIME), -- revisar
+		hora TIME DEFAULT CAST(GETDATE () AS TIME), -- revisar
 		id_medico INT NOT NULL,
 		id_especialidad INT NOT NULL,
 		id_direccion_atencion INT NOT NULL,
@@ -261,21 +261,21 @@ CREATE TABLE
 	datos.estados_turnos (
 		id_estado INT IDENTITY (1, 1),
 		nombre VARCHAR(30) CHECK (
-			nombre ILIKE 'Atendido'
-			OR nombre ILIKE 'Ausente'
-			OR nombre ILIKE 'Cancelado'
+			UPPER(nombre) LIKE 'ANTENDIDO'
+			OR UPPER(nombre) LIKE 'AUSENTE'
+			OR UPPER(nombre) LIKE 'CANCELADO'
 		), -- referencia a estados :sask
-		CONSTRAINT pk_id_estado_turno PRIMARY key (id_estado_turno)
+		CONSTRAINT pk_id_estado_turno PRIMARY key (id_estado)
 	);
 
 
 -- Creación de la tabla "Tipo de turno"
 CREATE TABLE
 	datos.tipos_turnos (
-		tipo_turno INT IDENTITY (1, 1),
+		id_tipo_turno INT IDENTITY (1, 1),
 		nombre_tipo VARCHAR(30) CHECK (
-			nombre_tipo ILIKE 'Presencial'
-			OR nombre_tipo ILIKE 'Virtual'
+			UPPER(nombre_tipo) LIKE 'PRESENCIAL'
+			OR UPPER(nombre_tipo) LIKE 'VIRTUAL'
 		),
 		CONSTRAINT pk_tipo_turno PRIMARY key (tipo_turno)
 	);
@@ -301,7 +301,8 @@ CREATE TABLE
 		id_sede INT IDENTITY (1, 1),
 		nombre VARCHAR(100) NOT NULL,
 		direccion INT,
-		CONSTRAINT pk_id_medico PRIMARY key (id_sede) CONSTRAINT fk_id_direccion FOREIGN key (direccion) REFERENCES referencias.direcciones (id_direccion)
+		CONSTRAINT pk_id_medico_sede_de_atención PRIMARY key (id_sede),
+		CONSTRAINT fk_id_direccion FOREIGN key (direccion) REFERENCES referencias.direcciones (id_direccion)
 	);
 
 
@@ -313,7 +314,8 @@ CREATE TABLE
 		apellido nvarchar (50) NOT NULL,
 		nro_matricula INT NOT NULL, -- esta bien? :sask
 		id_especialidad INT,
-		CONSTRAINT pk_id_medico PRIMARY key (id_medico) CONSTRAINT fk_id_especialidad FOREIGN key (id_especialidad) REFERENCES datos.especialidad (id_especialidad)
+		CONSTRAINT pk_id_medico PRIMARY key (id_medico),
+		CONSTRAINT fk_id_especialidad FOREIGN key (id_especialidad) REFERENCES datos.especialidad (id_especialidad)
 	);
 
 
