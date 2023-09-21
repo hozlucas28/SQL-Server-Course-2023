@@ -1,9 +1,9 @@
 <h1 align="center">
-    SQL Server Couse [2023]
+    SQL Server Couse - I [2023]
 </h1>
 
 <h4 align="center">
-    Repository of the Database assignment, SQL Server unit - <a href="https://www.unlam.edu.ar/" target="_blank">UNLaM</a> (university).
+    Repository of the Database assignment (part one), SQL Server unit - <a href="https://www.unlam.edu.ar/" target="_blank">UNLaM</a> (university).
 </h4>
 
 <p align="center">
@@ -23,7 +23,7 @@
     Summary
 </h2>
 <p>
-    This is a repository where I store all lessons that I take on the Database assignment of <a href="https://www.unlam.edu.ar/" target="_blank">National University of Matanza</a> (UNLaM), related with SQL Server.
+    This is a repository where I store all lessons that I take on the Database assignment (part one) of <a href="https://www.unlam.edu.ar/" target="_blank">National University of Matanza</a> (UNLaM), related with SQL Server.
 </p>
 
 <h2>
@@ -46,6 +46,9 @@
         </li>
         <li>
             <a href="https://github.com/hozlucas28/C--Course-2022" target="_blank">Repository of C++ course - 2022</a>
+        </li>
+        <li>
+            <a href="https://github.com/hozlucas28/SQL-Server-Course-II-2023" target="_blank">Repository of SQL Server - II course</a>
         </li>
     </ul>
 </p>
