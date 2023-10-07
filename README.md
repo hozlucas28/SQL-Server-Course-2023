@@ -1,5 +1,5 @@
 <h1 align="center">
-    SQL Server Couse - I [2023]
+    SQL Server Course - I [2023]
 </h1>
 
 <h4 align="center">
