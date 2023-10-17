@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-    <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/88015479/245057155-e0b650f5-5176-4667-aaf5-3e10c9ff0fc2.png" width="275">
+    <img src="./.github/sql-server-logo.png" width="275">
 </p>
 
 <h2>
