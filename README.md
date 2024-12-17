@@ -37,7 +37,7 @@
     Related
 </h2>
 <p>
-    <ul>    
+    <ul>
         <li>
             <a href="https://github.com/hozlucas28/C-Course-2022" target="_blank">Repository of C course - 2022</a>
         </li>
@@ -46,6 +46,9 @@
         </li>
         <li>
             <a href="https://github.com/hozlucas28/C--Course-2022" target="_blank">Repository of C++ course - 2022</a>
+        </li>
+        <li>
+            <a href="https://github.com/hozlucas28/C-Practical-Work-2024" target="_blank">Repository of C practical work - 2024</a>
         </li>
         <li>
             <a href="https://github.com/hozlucas28/SQL-Server-Course-II-2023" target="_blank">Repository of SQL Server - II course</a>
